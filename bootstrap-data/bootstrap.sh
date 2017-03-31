@@ -20,7 +20,7 @@
 # sed '/\[mysqld\]/a max_connections = 1024\' -i $PATH_MYSQL_CONFIG
 
 # MYSQL SETUP
-SQL_LOCATION=/homer-api/sql
+SQL_LOCATION=/homer-api/sql/mysql
 DATADIR=/var/lib/mysql
 
 # ------- First thing we'll do is wait until mysql is up....
@@ -63,6 +63,8 @@ if [[ ! "$databases" =~ "homer_data" ]]; then
   echo "Creating Tables..."
   mysql --host "$DB_HOST" -u "$DB_USER" homer_data < $SQL_LOCATION/schema_data.sql
   mysql --host "$DB_HOST" -u "$DB_USER" homer_configuration < $SQL_LOCATION/schema_configuration.sql
+  cat $SQL_LOCATION/schema_statistic.sql
+  cat $SQL_LOCATION/schema_configuration.sql
   mysql --host "$DB_HOST" -u "$DB_USER" homer_statistic < $SQL_LOCATION/schema_statistic.sql
   
   # echo "Creating local DB Node..."

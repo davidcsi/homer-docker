@@ -40,7 +40,8 @@ RUN chmod -R 755 /var/lib/mysql/
 WORKDIR /
 
 # HOMER 5
-RUN git clone --depth 1 https://github.com/sipcapture/homer-api.git /homer-api
+RUN git clone https://github.com/davidcsi/homer-api.git /homer-api && cd /homer-api && git checkout new_component_asracd
+RUN cat /homer-api/sql/mysql/schema_configuration.sql && cd /
 RUN git clone --depth 1 https://github.com/sipcapture/homer-ui.git /homer-ui
 
 RUN chmod -R +x /homer-api/scripts/*
@@ -57,8 +58,9 @@ COPY data/vhost.conf /etc/apache2/sites-enabled/000-default.conf
 
 # Kamailio + sipcapture module
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xfb40d3e6508ea4c8
-RUN echo "deb http://deb.kamailio.org/kamailio jessie main" >> etc/apt/sources.list
-RUN echo "deb-src http://deb.kamailio.org/kamailio jessie main" >> etc/apt/sources.list
+#RUN echo "deb http://deb.kamailio.org/kamailio jessie main" >> etc/apt/sources.list
+#RUN echo "deb-src http://deb.kamailio.org/kamailio jessie main" >> etc/apt/sources.list
+RUN echo "deb http://deb.kamailio.org/kamailiodev-nightly/ jessie main" >> /etc/apt/sources.list
 RUN apt-get update -qq && apt-get install -f -yqq kamailio rsyslog kamailio-outbound-modules kamailio-geoip-modules kamailio-sctp-modules kamailio-tls-modules kamailio-websocket-modules kamailio-utils-modules kamailio-mysql-modules kamailio-extra-modules && rm -rf /var/lib/apt/lists/*
 
 COPY data/kamailio.cfg /etc/kamailio/kamailio.cfg
